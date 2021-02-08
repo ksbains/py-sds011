@@ -1,34 +1,40 @@
 from sds011 import *
 sensor = SDS011("/dev/ttyUSB0", use_query_mode=True)
-import datetime
+from datetime import *
 import time
 import schedule
 import csv
 
+
+today = date.today()
+fileName = today.strftime("%m.%d.%y")
+fileName = fileName +".csv"
+data = []
+
+
+def recordData():
+    f = open(fileName,'a', newline='')
+    fieldNames = ["time", "pmt 2.5", "pmt 10"]
+    thewriter = csv.DictWriter(f, fieldnames=fieldNames)
+    thewriter.writeheader()
+    for i in data:
+        thewriter.writerow(i)
+
+
 def record():
-    ct = datetime.datetime.now()
+    ct = datetime.now()
     pmt_2_5, pmt_10 = sensor.query()
     print(str(ct), str(pmt_2_5), str(pmt_10))
-    with open('pmtData','w', newline='') as f:
-        thewriter = csv.writer(f)
-        thewriter.writerow([str(ct), str(pmt_2_5), str(pmt_10)])
+    data.append({"time": str(ct), 'pmt 2.5': str(pmt_2_5), 'pmt 10': str(pmt_10)})
 
+# every 10 seconds record data to dict
+schedule.every(1).seconds.do(record)
+#every minute create and fill file with data. 
+schedule.every(10).seconds.do(recordData)
 
-with open('pmtData','w', newline='') as f:
-    thewriter = csv.writer(f)
-    thewriter.writerow(["time", "pmt 2.5", "pmt 10"])
-    
-
-schedule.every(30).seconds.do(record)
 
 
 while 1:
     schedule.run_pending()
     time.sleep(1)
-
-
-
-# print("The pmt values are:")
-# print("PMT 2.5: " + str(pmt_2_5))
-# print("PMT 10: " + str(pmt_10))
 
