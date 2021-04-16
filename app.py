@@ -4,22 +4,18 @@ from datetime import *
 import time
 import schedule
 import csv
-
-
-today = date.today()
-fileName = today.strftime("%m.%d.%y")
-fileName = fileName +".csv"
 data = []
-
-
 def recordData():
-    f = open(fileName,'a', newline='')
-    fieldNames = ["time", "pmt 2.5", "pmt 10"]
-    thewriter = csv.DictWriter(f, fieldnames=fieldNames)
-    thewriter.writeheader()
-    for i in data:
-        thewriter.writerow(i)
-
+    today = date.today()
+    fileName = today.strftime("%m.%d.%y")
+    fileName = fileName +".csv"
+    with open(fileName,'a', newline='') as fileObject:
+        fieldNames = ["time", "pmt 2.5", "pmt 10"]
+        writer = csv.DictWriter(fileObject, fieldnames=fieldNames)
+        writer.writeheader()
+        for i in data:
+            writer.writerow(i)
+    data = []
 
 def record():
     ct = datetime.now()
@@ -28,9 +24,9 @@ def record():
     data.append({"time": str(ct), 'pmt 2.5': str(pmt_2_5), 'pmt 10': str(pmt_10)})
 
 # every 10 seconds record data to dict
-schedule.every(1).seconds.do(record)
+schedule.every(30).seconds.do(record)
 #every minute create and fill file with data. 
-schedule.every(10).seconds.do(recordData)
+schedule.every(24).hours.do(recordData)
 
 
 
