@@ -22,21 +22,41 @@ def getOneUser(username):
 
 def addUser():
     addUserRoute = MGR + 'user'
-    print("the user route is: " + addUserRoute)
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     payload = {"username": "bob", "password": "bobISbob", "userType": "GOAT", "homeType": "mansion", "isSmoker":True, "hasAC":True, "houseAge":420420 }
     bob = requests.post(addUserRoute, data=json.dumps(payload), headers=headers)
 
-def addSensor():
-    print("Adding the Sensor data now.")
+
+def addSensor(pm2_5):
+    addSensorRoute = MGR + 'sensor'
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    payload = {
+        "pm2_5Data": [{
+            "pm2_5": pm2_5,
+            "dateTime": "2021-04-20 -4:20:00"
+        }]
+    }
+    sensorData = requests.post(addSensorRoute, data=json.dumps(payload), headers = headers)
+    pprint.pprint(sensorData.json())
+
+def getOneSensor():
+    # still need to do
+    print("darn")
+
 
 def main():
-    print("I will retrieve Alice")
-    getOneUser("alice")
-    print("I will add the GOAT, bob")
-    addUser()
+    # print("I will retrieve Alice")
+    # getOneUser("alice")
+    # print("I will add the GOAT, bob")
+    # addUser()
     print("I will now get all of the users")
     getAllUsers()
     print()
+    addSensor("25")
+
+
+
+
+
 
 main()
