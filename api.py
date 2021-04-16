@@ -24,16 +24,15 @@ def addUser():
     addUserRoute = MGR + 'user'
     print("the user route is: " + addUserRoute)
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    data = {"username": "bob", "password": "bobISbob", "userType": "GOAT", "homeType": "mansion", "isSmoker":True, "hasAC":True, "houseAge":420420 }
-    data_json = simplejson.dumps(data)
-    payload = {'json_payload': data_json}
-    bob = requests.post(addUserRoute, data=json.dumps(data), headers=headers)
-    # pprint.pprint(bob.json())
-    print(bob.text)
+    payload = {"username": "bob", "password": "bobISbob", "userType": "GOAT", "homeType": "mansion", "isSmoker":True, "hasAC":True, "houseAge":420420 }
+    bob = requests.post(addUserRoute, data=json.dumps(payload), headers=headers)
+
+def addSensor():
+    print("Adding the Sensor data now.")
 
 def main():
-    # print("I will retrieve Alice")
-    # getOneUser("alice")
+    print("I will retrieve Alice")
+    getOneUser("alice")
     print("I will add the GOAT, bob")
     addUser()
     print("I will now get all of the users")
