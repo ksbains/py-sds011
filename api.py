@@ -27,14 +27,16 @@ def addUser():
     bob = requests.post(addUserRoute, data=json.dumps(payload), headers=headers)
 
 
-def addSensor(pm2_5):
+def addSensor(username, pm2_5, pm10, temp, humidity, dateTime):
     addSensorRoute = MGR + 'sensor'
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     payload = {
-        "pm2_5Data": [{
-            "pm2_5": pm2_5,
-            "dateTime": "2021-04-20 -4:20:00"
-        }]
+        "username": username,
+        "pm2_5Data": pm2_5,
+        "pm10Data": pm10,
+        "tempData":temp,
+        "humidityData":humidity,
+        "dateTimeData": dateTime
     }
     sensorData = requests.post(addSensorRoute, data=json.dumps(payload), headers = headers)
     pprint.pprint(sensorData.json())
@@ -52,11 +54,16 @@ def main():
     print("I will now get all of the users")
     getAllUsers()
     print()
-    addSensor("25")
+    username = "raspberryPi"
+    pm2_5Data = "2.5"
+    pm10Data = "10"
+    tempData = "83"
+    humidityData = "50"
+    dateTimeData = "04/20/2021 04:2"
+    addSensor(username, pm2_5Data, pm10Data, tempData, humidityData, dateTimeData)
 
 
 
 
 
-
-main()
+# main()
