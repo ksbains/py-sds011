@@ -38,7 +38,10 @@ def addSensor(username, pm2_5, pm10, temp, humidity, dateTime):
         "humidityData":humidity,
         "dateTimeData": dateTime
     }
-    sensorData = requests.post(addSensorRoute, data=json.dumps(payload), headers = headers)
+    try:
+        sensorData = requests.post(addSensorRoute, data=json.dumps(payload), headers = headers)
+    except requests.exceptions.ConnectionError:
+        sensorData.staus_code = "Connection refused"    
     pprint.pprint(sensorData.json())
 
 def getOneSensor():
